@@ -1,4 +1,4 @@
-name: Build and Deploy to Cloud Run
+name: CI-CD with Environments
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
         run: echo I am deploying to dev env
 
   Staging:
-    name: Deploy to Dev
+    name: Deploy to Staging
     if: github.event_name == 'refs/heads/main'
     needs: [Build]
     runs-on: ubuntu-latest

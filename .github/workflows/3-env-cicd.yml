@@ -30,7 +30,7 @@ jobs:
 
   Staging:
     name: Deploy to Staging
-    if: github.event_name == 'refs/heads/main'
+    if: github.event.ref== 'refs/heads/main'
     needs: [Build]
     runs-on: ubuntu-latest
     environment:

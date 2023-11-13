@@ -5,6 +5,7 @@ on:
     branches: ["main"]
   pull_request:
     branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   Build:
@@ -18,7 +19,6 @@ jobs:
 
   Development:
     name: Deploy to Dev
-    if: github.event_name == 'pull_request'
     needs: [Build]
     runs-on: ubuntu-latest
     environment:
@@ -30,7 +30,7 @@ jobs:
 
   Staging:
     name: Deploy to Staging
-    if: github.event_name == 'refs/heads/main'
+    if: github.event_name == 'pull_request'
     needs: [Build]
     runs-on: ubuntu-latest
     environment:
@@ -42,6 +42,7 @@ jobs:
 
   Production:
     name: Deploy to production
+    if: github.event_name == 'workflow_dispatch'
     needs: [Staging]
     runs-on: ubuntu-latest
     environment:

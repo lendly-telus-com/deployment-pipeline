@@ -34,12 +34,18 @@
 #           workload_identity_pool: ${{secrets.WORKLOAD_IDENTITY_PROVIDER_ID}}
 #           workload_identity_principal: ${{secrets.SERVICE_ACCOUNT}}
 #           project_id: ${{secrets.GCP_PROJECT_ID}}
+- name: Set up Google Cloud SDK
+  uses: google-github-actions/setup-gcloud@v0.3.0
+  with:
+    workload_identity_pool: ${{secrets.WIF_POOL}}
+    workload_identity_principal: ${{secrets.SERVICE_ACCOUNT}}
+    project_id: ${{secrets.GCP_PROJECT_ID}}
 
-#       - name: Get JSON content from GitHub deployments URL and Upload to GCS
-#         run: |
-#           json_content=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "${{ github.event.repository.deployments_url }}")
-#           commit_hash=$(git rev-parse HEAD)
-#           filtered_json_array=$(echo "$json_content" | jq --arg commit_hash "$commit_hash" '[.[] | select(.sha == $commit_hash)]')
+- name: Get JSON content from GitHub deployments URL and Upload to GCS
+  run: |
+    json_content=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "${{ github.event.repository.deployments_url }}")
+    commit_hash=$(git rev-parse HEAD)          
+    filtered_json_array=$(echo "$json_content" | jq --arg commit_hash "$commit_hash" '[.[] | select(.sha == $commit_hash)]')
 
 #           if [ -n "$filtered_json_array" ]; then
 #             for i in $(seq 0 $(echo "$filtered_json_array" | jq length - 1)); do
